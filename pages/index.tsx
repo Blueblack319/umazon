@@ -1,14 +1,13 @@
-import Head from 'next/head';
-import { Button } from 'antd';
-
+import Header from '../components/Header';
 import { useAuth } from '../utils/auth';
 
 export default function Home() {
   const auth = useAuth();
   return (
-    <div>
+    <>
+      <Header />
       <h1>Main Page</h1>
       <p>fjdksalfjsdjkla;fjsladjfsdljldsaf;jfksdlafjsdklafjkl</p>
-    </div>
+    </>
   );
 }
