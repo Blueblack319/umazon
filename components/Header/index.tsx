@@ -16,8 +16,9 @@ import {
 } from '@chakra-ui/react';
 import { SearchIcon } from '@chakra-ui/icons';
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 
-import CustomBtn from './CustomBtn';
+import CustomBtn from '../CustomBtn';
 
 interface HeaderProps {}
 
@@ -39,6 +40,7 @@ const searchOptions = (
 );
 
 const Header: React.FC<HeaderProps> = () => {
+  const router = useRouter();
   const [isFocus, setIsFocus] = useState(false);
 
   const handleInputFocused = () => {
@@ -46,6 +48,9 @@ const Header: React.FC<HeaderProps> = () => {
   };
   const handleInputBlurred = () => {
     setIsFocus(false);
+  };
+  const handleLogoClicked = () => {
+    router.push('/');
   };
 
   return (
@@ -58,12 +63,15 @@ const Header: React.FC<HeaderProps> = () => {
     >
       <Box
         h="50px"
-        w="150px"
-        m="0 20px 0 10px"
+        w="200px"
+        p="0 20px"
+        m="0 10px"
         bgColor="black"
         color="white"
         border="1px solid black"
         cursor="pointer"
+        _hover={{ border: '1px solid white', borderRadius: '3px' }}
+        onClick={handleLogoClicked}
       >
         <Image
           src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSG2AwepbH0wji4lVTKbCDhoiSMXCLeNIgcog&usqp=CAU"

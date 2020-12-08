@@ -5,10 +5,13 @@ const CustomBtn: React.FC = ({ children }) => (
     bgColor="black"
     color="white"
     border="1px solid black"
-    _hover={{ backgroundColor: 'black', border: '1px solid white' }}
+    _hover={{
+      backgroundColor: 'black',
+      border: '1px solid white',
+      animation: '0s',
+    }}
     _focus={{ backgroundColor: 'black' }}
     _active={{ backgroundColor: 'black' }}
-    animation="none"
     h="100%"
   >
     {children}
