@@ -1,6 +1,5 @@
 import {
   Flex,
-  Spacer,
   Box,
   Image,
   Input,
@@ -10,9 +9,7 @@ import {
   Select,
   IconButton,
   Stack,
-  Button,
   Text,
-  border,
 } from '@chakra-ui/react';
 import { SearchIcon } from '@chakra-ui/icons';
 import { useState } from 'react';
