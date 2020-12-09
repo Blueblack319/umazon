@@ -36,7 +36,7 @@ export default function Home() {
 
   useEffect(() => {
     setSlideStyle({
-      transform: `translateX(-${boxRef.current?.clientWidth * index}px)`,
+      transform: `translateX(-${boxRef.current?.clientWidth! * index}px)`,
     });
   }, [winWidth]);
   const handleLeftIconClicked = () => {
