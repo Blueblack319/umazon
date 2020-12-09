@@ -1,48 +1,101 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect, createRef } from 'react';
 import { ArrowLeftIcon, ArrowRightIcon } from '@chakra-ui/icons';
-import { Button, Flex } from '@chakra-ui/react';
+import { Box, Button, Flex, HStack, Image } from '@chakra-ui/react';
 
 import Header from '../components/Header';
 import { useAuth } from '../utils/auth';
 
 const bgImages = [
-  '/bg1.jpg',
-  '/bg2.jpg',
-  '/bg3.jpg',
-  '/bg4.jpg',
-  '/bg5.jpg',
-  '/bg6.jpg',
+  ['/bg6.jpg', '0'], // 0
+  ['/bg1.jpg', '1'], // 400, 1
+  ['/bg2.jpg', '2'], // 800, 2
+  ['/bg3.jpg', '3'], // 1200, 3
+  ['/bg4.jpg', '4'], // 1600, 4
+  ['/bg5.jpg', '5'], // 2000, 5
+  ['/bg6.jpg', '6'], // 2400, 6
+  ['/bg1.jpg', '7'], // 2800
 ];
 
 export default function Home() {
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState<number>(1);
+  const [slideStyle, setSlideStyle] = useState<React.CSSProperties | undefined>(
+    undefined
+  );
+  const boxRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    setSlideStyle({
+      transform: `translateX(-${boxRef?.current?.clientWidth!}px)`,
+    });
+  }, []);
+
   const handleLeftIconClicked = () => {
-    if (index === 0) {
-      setIndex(5);
-    } else {
-      setIndex((prevIndex) => prevIndex - 1);
+    console.log(index);
+    if (index >= 1) {
+      setSlideStyle({
+        transition: '700ms',
+        transform: `translateX(-${
+          boxRef?.current?.clientWidth! * (index - 1)
+        }px)`,
+      });
+      setIndex(index - 1);
+    }
+    if (index === 1) {
+      setTimeout(function () {
+        setSlideStyle({
+          transition: '0ms',
+          transform: `translateX(-${
+            boxRef?.current?.clientWidth! * (bgImages.length - 2)
+          }px)`,
+        });
+      }, 700);
+      setIndex(bgImages.length - 2);
     }
   };
   const handleRightIconClicked = () => {
-    if (index === 5) {
-      setIndex(0);
-    } else {
-      setIndex((prevIndex) => prevIndex + 1);
+    if (index <= bgImages.length - 2) {
+      setSlideStyle({
+        transition: '700ms',
+        transform: `translateX(-${
+          boxRef?.current?.clientWidth! * (index + 1)
+        }px)`,
+      });
+      setIndex(index + 1);
+    }
+    if (index === bgImages.length - 2) {
+      setTimeout(function () {
+        setSlideStyle({
+          transition: '0ms',
+          transform: `translateX(-${boxRef?.current?.clientWidth!}px)`,
+        });
+      }, 700);
+      setIndex(1);
     }
   };
 
   const auth = useAuth();
   return (
-    <div style={{ backgroundColor: '#EAEDED', minHeight: '100vh' }}>
+    <div
+      style={{
+        backgroundColor: '#EAEDED',
+        minHeight: '100vh',
+      }}
+    >
       <Header />
-      <div
-        style={{
-          backgroundImage: `linear-gradient(rgba(255, 255, 255, 0) 50%, #EAEDED, #EAEDED), url(${bgImages[index]})`,
-          backgroundRepeat: 'no-repeat ',
-          minHeight: 'calc(100vh - 60px)',
-          margin: '0 20px',
-        }}
-      >
+      <main style={{ margin: '0 40px' }}>
+        <Box w="100%" overflowX="hidden" ref={boxRef}>
+          <HStack style={slideStyle} spacing="0">
+            {bgImages.map((img) => {
+              return (
+                <Image
+                  src={img[0]}
+                  alt="bgImage"
+                  key={img[1] + new Date().toISOString()}
+                />
+              );
+            })}
+          </HStack>
+        </Box>
         <Flex
           h="250px"
           w="100%"
@@ -62,7 +115,7 @@ export default function Home() {
             onClick={handleRightIconClicked}
           />
         </Flex>
-      </div>
+      </main>
     </div>
   );
 }
