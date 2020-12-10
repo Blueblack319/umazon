@@ -27,13 +27,14 @@ import {
   NumberDecrementStepper,
   NumberInputStepper,
 } from '@chakra-ui/react';
-import { SearchIcon } from '@chakra-ui/icons';
-import { useState } from 'react';
+import { SearchIcon, StarIcon } from '@chakra-ui/icons';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
-import CustomBtn from '../CustomBtn';
+import CustomBtn from './CustomBtn';
+import { start } from 'repl';
 
 interface HeaderProps {}
 
@@ -56,7 +57,8 @@ const searchOptions = (
 
 const Header: React.FC<HeaderProps> = () => {
   const router = useRouter();
-  const [isFocus, setIsFocus] = useState(false);
+  const [isFocus, setIsFocus] = useState<boolean>(false);
+  const [rating, setRating] = useState<Array<React.ReactNode>>([]);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -68,6 +70,16 @@ const Header: React.FC<HeaderProps> = () => {
   };
   const handleLogoClicked = () => {
     router.push('/');
+  };
+  const handleShowRating = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ): void => {
+    const value = parseInt(event.target.value);
+    const stars = [];
+    for (let i = 0; i < value; i++) {
+      stars.push(<StarIcon color="gold" key={i} />);
+    }
+    setRating(stars);
   };
 
   return (
@@ -213,7 +225,12 @@ const Header: React.FC<HeaderProps> = () => {
                   {({ field }: any) => (
                     <FormControl>
                       <FormLabel htmlFor="cost">Cost</FormLabel>
-                      <NumberInput defaultValue={15} precision={2} step={0.2}>
+                      <NumberInput
+                        defaultValue={15}
+                        precision={2}
+                        step={0.2}
+                        {...field}
+                      >
                         <NumberInputField />
                         <NumberInputStepper>
                           <NumberIncrementStepper />
@@ -228,7 +245,14 @@ const Header: React.FC<HeaderProps> = () => {
                   {({ field }: any) => (
                     <FormControl>
                       <FormLabel htmlFor="rating">Rating</FormLabel>
-                      <Input {...field} id="rating" placeholder="Rating" />
+                      <Select onChange={handleShowRating}>
+                        <option value={1}>Very Bad..</option>
+                        <option value={2}>Bad..</option>
+                        <option value={3}>Good</option>
+                        <option value={4}>Very Good!</option>
+                        <option value={5}>Excellent!</option>
+                      </Select>
+                      {rating}
                       <ErrorMessage name="rating" />
                     </FormControl>
                   )}
