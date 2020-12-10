@@ -58,7 +58,9 @@ const searchOptions = (
 const Header: React.FC<HeaderProps> = () => {
   const router = useRouter();
   const [isFocus, setIsFocus] = useState<boolean>(false);
-  const [rating, setRating] = useState<Array<React.ReactNode>>([]);
+  const [rating, setRating] = useState<Array<React.ReactNode>>([
+    <StarIcon color="gold" key={-1} />,
+  ]);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -71,7 +73,7 @@ const Header: React.FC<HeaderProps> = () => {
   const handleLogoClicked = () => {
     router.push('/');
   };
-  const handleShowRating = (
+  const handleRatingChanged = (
     event: React.ChangeEvent<HTMLSelectElement>
   ): void => {
     const value = parseInt(event.target.value);
@@ -205,89 +207,134 @@ const Header: React.FC<HeaderProps> = () => {
                   .max(100, 'Must be 100 charaters or less')
                   .required('Image is Required'),
               })}
-              onSubmit={(values) => console.log(values)}
+              onSubmit={(values, actions) =>
+                setTimeout(() => {
+                  console.log(values);
+                  actions.setSubmitting(false);
+                }, 1000)
+              }
             >
-              <Form>
-                <Field name="productName">
-                  {({ field }: any) => (
-                    <FormControl>
-                      <FormLabel htmlFor="productName">Product Name</FormLabel>
-                      <Input
-                        {...field}
-                        id="productName"
-                        placeholder="productName"
-                      />
-                      <ErrorMessage name="productName" />
-                    </FormControl>
-                  )}
-                </Field>
-                <Field name="cost" type="text">
-                  {({ field }: any) => (
-                    <FormControl>
-                      <FormLabel htmlFor="cost">Cost</FormLabel>
-                      <NumberInput
-                        defaultValue={15}
-                        precision={2}
-                        step={0.2}
-                        {...field}
+              {(props) => (
+                <Form>
+                  <Field name="productName">
+                    {({ field, form }: any) => {
+                      return (
+                        <FormControl
+                          isInvalid={
+                            form.errors.productName && form.touched.productName
+                          }
+                        >
+                          <FormLabel htmlFor="productName">
+                            Product Name
+                          </FormLabel>
+                          <Input
+                            {...field}
+                            id="productName"
+                            placeholder="productName"
+                          />
+                          <ErrorMessage name="productName" />
+                        </FormControl>
+                      );
+                    }}
+                  </Field>
+                  <Field name="cost" type="text">
+                    {({ field, form }: any) => {
+                      // console.log(field);
+                      return (
+                        <FormControl
+                          isInvalid={form.errors.cost && form.touched.cost}
+                        >
+                          <FormLabel htmlFor="cost">Cost</FormLabel>
+                          <NumberInput
+                            defaultValue={15}
+                            precision={2}
+                            step={0.2}
+                            onChange={(value) =>
+                              props.setFieldValue(field.name, value)
+                            }
+                            onBlur={props.handleBlur}
+                          >
+                            <NumberInputField />
+                            <NumberInputStepper>
+                              <NumberIncrementStepper />
+                              <NumberDecrementStepper />
+                            </NumberInputStepper>
+                          </NumberInput>
+                          <ErrorMessage name="cost" />
+                        </FormControl>
+                      );
+                    }}
+                  </Field>
+                  <Field name="rating">
+                    {({ field, form }: any) => (
+                      <FormControl
+                        isInvalid={form.errors.rating && form.touched.rating}
                       >
-                        <NumberInputField />
-                        <NumberInputStepper>
-                          <NumberIncrementStepper />
-                          <NumberDecrementStepper />
-                        </NumberInputStepper>
-                      </NumberInput>
-                      <ErrorMessage name="cost" />
-                    </FormControl>
-                  )}
-                </Field>
-                <Field name="rating">
-                  {({ field }: any) => (
-                    <FormControl>
-                      <FormLabel htmlFor="rating">Rating</FormLabel>
-                      <Select onChange={handleShowRating}>
-                        <option value={1}>Very Bad..</option>
-                        <option value={2}>Bad..</option>
-                        <option value={3}>Good</option>
-                        <option value={4}>Very Good!</option>
-                        <option value={5}>Excellent!</option>
-                      </Select>
-                      {rating}
-                      <ErrorMessage name="rating" />
-                    </FormControl>
-                  )}
-                </Field>
-                <Field name="description">
-                  {({ field }: any) => (
-                    <FormControl>
-                      <FormLabel htmlFor="description">Description</FormLabel>
-                      <Input
-                        {...field}
-                        id="description"
-                        placeholder="Description"
-                      />
-                      <ErrorMessage name="description" />
-                    </FormControl>
-                  )}
-                </Field>
-                <Field name="img">
-                  {({ field }: any) => (
-                    <FormControl>
-                      <FormLabel htmlFor="img">Image</FormLabel>
-                      <Input {...field} id="img" placeholder="Image" />
-                      <ErrorMessage name="img" />
-                    </FormControl>
-                  )}
-                </Field>
-              </Form>
+                        <FormLabel htmlFor="rating">Rating</FormLabel>
+                        <Select
+                          onChange={(e) => {
+                            props.setFieldValue(field.name, e.target.value);
+                            handleRatingChanged(e);
+                          }}
+                          defaultValue={1}
+                        >
+                          <option value={1}>Very Bad..</option>
+                          <option value={2}>Bad..</option>
+                          <option value={3}>Good</option>
+                          <option value={4}>Very Good!</option>
+                          <option value={5}>Excellent!</option>
+                        </Select>
+                        {rating}
+                        <ErrorMessage name="rating" />
+                      </FormControl>
+                    )}
+                  </Field>
+                  <Field name="description">
+                    {({ field, form }: any) => (
+                      <FormControl
+                        isInvalid={
+                          form.errors.description && form.touched.description
+                        }
+                      >
+                        <FormLabel htmlFor="description">Description</FormLabel>
+                        <Input
+                          {...field}
+                          id="description"
+                          placeholder="Description"
+                        />
+                        <ErrorMessage name="description" />
+                      </FormControl>
+                    )}
+                  </Field>
+                  <Field name="img">
+                    {({ field, form }: any) => (
+                      <FormControl
+                        isInvalid={form.errors.img && form.touched.img}
+                      >
+                        <FormLabel htmlFor="img">Image</FormLabel>
+                        <input type="file" {...field} accept="image/*" />
+                        <br />
+                        <ErrorMessage name="img" />
+                      </FormControl>
+                    )}
+                  </Field>
+                  <ModalFooter>
+                    <Button
+                      mr={4}
+                      colorScheme="teal"
+                      type="submit"
+                      isLoading={props.isSubmitting}
+                    >
+                      Submit
+                    </Button>
+                    <Button colorScheme="blue" onClick={onClose}>
+                      Close
+                    </Button>
+                  </ModalFooter>
+                </Form>
+              )}
             </Formik>
           </ModalBody>
-
-          <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onClose}>
-              Close
-            </Button>
-          </ModalFooter>
         </ModalContent>
       </Modal>
     </>
