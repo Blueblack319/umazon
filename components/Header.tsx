@@ -28,15 +28,12 @@ import {
   NumberInputStepper,
 } from '@chakra-ui/react';
 import { SearchIcon, StarIcon } from '@chakra-ui/icons';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
 import CustomBtn from './CustomBtn';
-import { start } from 'repl';
-
-interface HeaderProps {}
 
 const searchOptions = (
   <Select
@@ -55,7 +52,7 @@ const searchOptions = (
   </Select>
 );
 
-const Header: React.FC<HeaderProps> = () => {
+const Header: React.FC = () => {
   const router = useRouter();
   const [isFocus, setIsFocus] = useState<boolean>(false);
   const [rating, setRating] = useState<Array<React.ReactNode>>([
@@ -207,12 +204,12 @@ const Header: React.FC<HeaderProps> = () => {
                   .max(100, 'Must be 100 charaters or less')
                   .required('Image is Required'),
               })}
-              onSubmit={(values, actions) =>
+              onSubmit={(values, actions) => {
                 setTimeout(() => {
                   console.log(values);
                   actions.setSubmitting(false);
-                }, 1000)
-              }
+                }, 1000);
+              }}
             >
               {(props) => (
                 <Form>
