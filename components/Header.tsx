@@ -33,6 +33,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import Cookies from 'js-cookie';
 
 import CustomBtn from './CustomBtn';
 import { createProduct } from '../utils/db';
@@ -181,10 +182,16 @@ const Header: React.FC = () => {
           />
         </InputGroup>
         <Stack direction="row" spacing={1} align="center" h="100%">
-          <CustomBtn>
+          <CustomBtn
+            clicked={() => {
+              Cookies.get('umazon-auth')
+                ? router.push('/account')
+                : router.push('/signin');
+            }}
+          >
             <Stack spacing={0} align="baseline">
               <Text fontWeight={400} fontSize={13}>
-                Hello, Sign in
+                Hello, {Cookies.get('umazon-auth') ? 'User' : 'Sign in'}
               </Text>
               <Text fontWeight={600}>Account & Lists</Text>
             </Stack>
@@ -203,6 +210,9 @@ const Header: React.FC = () => {
           <CustomBtn clicked={onOpen}>
             <Text fontWeight={600}>Sell Item</Text>
           </CustomBtn>
+          <Button colorScheme="red" onClick={() => auth.signout()}>
+            Log out
+          </Button>
         </Stack>
       </Flex>
       <Modal isOpen={isOpen} onClose={onClose}>
