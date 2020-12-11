@@ -210,6 +210,9 @@ const Header: React.FC = () => {
           <CustomBtn clicked={onOpen}>
             <Text fontWeight={600}>Sell Item</Text>
           </CustomBtn>
+          <Button colorScheme="red" onClick={() => auth.signout()}>
+            Log out
+          </Button>
         </Stack>
       </Flex>
       <Modal isOpen={isOpen} onClose={onClose}>

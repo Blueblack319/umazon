@@ -7,23 +7,27 @@ import {
   useColorModeValue,
   IconButton,
   Button,
+  Link,
 } from '@chakra-ui/react';
-import { MoonIcon } from '@chakra-ui/icons';
+import { MoonIcon, SunIcon } from '@chakra-ui/icons';
 import { useRouter } from 'next/router';
 import { Field, Formik, Form } from 'formik';
 import * as Yup from 'yup';
 
 import { CustomInputField } from '../components/CustomField';
 import { useAuth } from '../utils/auth';
+import { useState } from 'react';
 
 interface signinProps {}
 
 const signin: React.FC<signinProps> = ({}) => {
-  const { toggleColorMode } = useColorMode();
+  const [result, setResult] = useState(null);
+  const { colorMode, toggleColorMode } = useColorMode();
   const router = useRouter();
   const auth = useAuth();
 
-  const bg = useColorModeValue('white', 'gray.700');
+  const boxBg = useColorModeValue('white', 'gray.700');
+  const bg = useColorModeValue('#EAEDED', '#1A202C');
 
   const handleGithubClicked = async () => {
     await auth.signinWithGithub();
@@ -31,7 +35,7 @@ const signin: React.FC<signinProps> = ({}) => {
   };
 
   return (
-    <Center h="100vh" w="100vw">
+    <Center h="100vh" w="100vw" bg={bg}>
       <Box
         boxShadow="xl"
         w={400}
@@ -39,7 +43,7 @@ const signin: React.FC<signinProps> = ({}) => {
         p="15px 0"
         borderRadius={20}
         pos="relative"
-        bg={bg}
+        bg={boxBg}
       >
         <Flex flexDir="column" align="center" h="100%">
           <Box m="20px 0">
@@ -65,9 +69,12 @@ const signin: React.FC<signinProps> = ({}) => {
             })}
             onSubmit={async (values, actions) => {
               actions.setSubmitting(true);
-              auth.signinWithEmail(values.email, values.password);
+              const result = await auth.signinWithEmail(
+                values.email,
+                values.password
+              );
+              setResult(result);
               actions.setSubmitting(false);
-              router.push('/');
             }}
           >
             {(formik) => (
@@ -107,6 +114,10 @@ const signin: React.FC<signinProps> = ({}) => {
                     );
                   }}
                 </Field>
+                <Text color="red.600">{result}</Text>
+                <Flex m="10px 0 0" justify="flex-end">
+                  <Link href="/signup">Go to Sign up</Link>
+                </Flex>
                 <Button
                   mt={6}
                   w="100%"
@@ -135,7 +146,7 @@ const signin: React.FC<signinProps> = ({}) => {
         <IconButton
           aria-label="colorMode"
           onClick={toggleColorMode}
-          icon={<MoonIcon />}
+          icon={colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
           pos="absolute"
           right="20px"
           top="20px"

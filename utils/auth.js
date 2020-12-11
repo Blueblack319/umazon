@@ -40,14 +40,37 @@ function useProvideAuth() {
     }
   };
 
-  const signinWithEmail = (email, password) => {
+  const signupWithEmail = async (values) => {
     setIsLoading(true);
-    return authService
-      .signInWithEmailAndPassword(email, password)
-      .then((res) => {
-        handleUser(res.user);
-        Router.push('/');
-      });
+    try {
+      return await authService
+        .createUserWithEmailAndPassword(values.email, values.password)
+        .then((res) => {
+          handleUser({
+            ...res.user,
+            displayName: values.displayName,
+            firstName: values.firstName,
+            lastName: values.lastName,
+          });
+          Router.push('/');
+        });
+    } catch (error) {
+      return error.message;
+    }
+  };
+
+  const signinWithEmail = async (email, password) => {
+    setIsLoading(true);
+    try {
+      return await authService
+        .signInWithEmailAndPassword(email, password)
+        .then((res) => {
+          handleUser(res.user);
+          Router.push('/');
+        });
+    } catch (error) {
+      return error.message;
+    }
   };
 
   const signinWithGithub = (redirect) => {
@@ -63,9 +86,9 @@ function useProvideAuth() {
       });
   };
 
-  const signout = () => {
+  const signout = async () => {
     Router.push('/');
-    return authService.signout().then(() => setUser(null));
+    return await authService.signOut().then(() => handleUser(false));
   };
 
   useEffect(() => {
@@ -82,6 +105,8 @@ function useProvideAuth() {
   return {
     user,
     signinWithGithub,
+    signinWithEmail,
+    signupWithEmail,
     signout,
   };
 }
@@ -98,8 +123,10 @@ const formatUser = async (user) => {
     uid: user.uid,
     email: user.email,
     name: user.displayName,
+    firstName: user.firstName ? user.firstName : null,
+    lastName: user.lastName ? user.lastName : null,
     token: user.ya,
-    provider: user.providerData[0].providerId,
+    provider: user.providerData[0]?.providerId,
     photoUrl: user.photoURL,
     stripeRole: await getStripeRole(),
   };

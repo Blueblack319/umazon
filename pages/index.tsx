@@ -82,10 +82,10 @@ export default function Home() {
     }
   };
   return (
-    <div style={{ backgroundColor: '#EAEDED', minHeight: '100vh' }}>
+    <Box bg="#EAEDED" minH="100vh">
       <Header />
       <main style={{ margin: '0 35px', minHeight: '100%' }}>
-        <Box w="100%" h="100%" ref={boxRef} overflowX="hidden">
+        <Box w="100%" h="100%" ref={boxRef} overflowX="hidden" bgColor="#EAEDE">
           <HStack
             spacing="0"
             w={boxRef.current?.clientWidth! * bgImages.length}
@@ -159,6 +159,6 @@ export default function Home() {
           </Grid>
         </Box>
       </main>
-    </div>
+    </Box>
   );
 }
