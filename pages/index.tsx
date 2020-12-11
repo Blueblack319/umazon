@@ -3,7 +3,6 @@ import { ArrowLeftIcon, ArrowRightIcon } from '@chakra-ui/icons';
 import { Flex, Box, HStack, Grid, Image, Text } from '@chakra-ui/react';
 
 import Header from '../components/Header';
-import { useAuth } from '../utils/auth';
 import ItemBox from '../components/ItemBox';
 
 const bgImages = [
@@ -82,8 +81,6 @@ export default function Home() {
       setIndex(1);
     }
   };
-
-  const auth = useAuth();
   return (
     <div style={{ backgroundColor: '#EAEDED', minHeight: '100vh' }}>
       <Header />
