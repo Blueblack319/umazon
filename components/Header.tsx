@@ -26,6 +26,7 @@ import {
   NumberIncrementStepper,
   NumberDecrementStepper,
   NumberInputStepper,
+  useToast,
 } from '@chakra-ui/react';
 import { SearchIcon, StarIcon } from '@chakra-ui/icons';
 import { useState } from 'react';
@@ -34,6 +35,8 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
 import CustomBtn from './CustomBtn';
+import { createProduct } from '../utils/db';
+import { useAuth } from '../utils/auth';
 
 const searchOptions = (
   <Select
@@ -54,12 +57,14 @@ const searchOptions = (
 
 const Header: React.FC = () => {
   const router = useRouter();
+  const auth = useAuth();
   const [isFocus, setIsFocus] = useState<boolean>(false);
   const [rating, setRating] = useState<Array<React.ReactNode>>([
     <StarIcon color="gold" key={-1} />,
   ]);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const toast = useToast();
 
   const handleInputFocused = () => {
     setIsFocus(true);
@@ -79,6 +84,33 @@ const Header: React.FC = () => {
       stars.push(<StarIcon color="gold" key={i} />);
     }
     setRating(stars);
+  };
+
+  const handleSubmitted = ({
+    productName,
+    cost,
+    rating,
+    description,
+    img,
+  }: any) => {
+    const newProduct = {
+      ownerId: auth.user.uid,
+      createdAt: new Date().toISOString(),
+      productName,
+      cost,
+      rating,
+      description,
+      img,
+    };
+    const { id } = createProduct(newProduct);
+    toast({
+      title: 'Success!',
+      description: `We've added your product ${id}.`,
+      status: 'success',
+      duration: 3000,
+      isClosable: true,
+    });
+    onClose();
   };
 
   return (
@@ -206,13 +238,14 @@ const Header: React.FC = () => {
               })}
               onSubmit={(values, actions) => {
                 setTimeout(() => {
-                  console.log(values);
+                  actions.setSubmitting(true);
+                  handleSubmitted(values);
                   actions.setSubmitting(false);
-                }, 1000);
+                }, 3000);
               }}
             >
               {(props) => (
-                <Form>
+                <Form onSubmit={props.handleSubmit}>
                   <Field name="productName">
                     {({ field, form }: any) => {
                       return (
@@ -236,7 +269,6 @@ const Header: React.FC = () => {
                   </Field>
                   <Field name="cost" type="text">
                     {({ field, form }: any) => {
-                      // console.log(field);
                       return (
                         <FormControl
                           isInvalid={form.errors.cost && form.touched.cost}
@@ -321,6 +353,7 @@ const Header: React.FC = () => {
                       colorScheme="teal"
                       type="submit"
                       isLoading={props.isSubmitting}
+                      disabled={props.isSubmitting}
                     >
                       Submit
                     </Button>
