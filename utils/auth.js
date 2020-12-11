@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext, createContext } from 'react';
 import Router from 'next/router';
+import Cookies from 'js-cookie';
 
 import { firebaseInstance, authService } from './firebase';
 import { createUser } from './db';
@@ -26,20 +27,18 @@ function useProvideAuth() {
 
       createUser(user.uid, userWithoutToken);
       setUser(user);
+      Cookies.set('umazon-auth', true, { expires: 1 });
 
       setIsLoading(false);
       return user;
     } else {
       setUser(false);
+      Cookies.remove('umazon-auth');
+
       setIsLoading(false);
       return false;
     }
   };
-
-  // const signupWithEmail = (email, password) => {
-  //   setIsLoading(true);
-  //   return authService.createUserWithEmailAndPassword(email, password).then
-  // }
 
   const signinWithEmail = (email, password) => {
     setIsLoading(true);
