@@ -6,3 +6,10 @@ export function createUser(uid, data) {
     .doc(uid)
     .set({ uid, ...data }, { merge: true });
 }
+
+export function createProduct(data) {
+  const product = dbService.collection('products').doc();
+  product.set(data);
+
+  return product;
+}

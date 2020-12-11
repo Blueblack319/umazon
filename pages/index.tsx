@@ -1,9 +1,10 @@
 import { useRef, useState, useEffect } from 'react';
 import { ArrowLeftIcon, ArrowRightIcon } from '@chakra-ui/icons';
-import { Button, Flex, Box, HStack } from '@chakra-ui/react';
+import { Flex, Box, HStack, Grid, Image, Text } from '@chakra-ui/react';
 
 import Header from '../components/Header';
 import { useAuth } from '../utils/auth';
+import ItemBox from '../components/ItemBox';
 
 const bgImages = [
   ['/bg6.jpg', '1'],
@@ -86,7 +87,7 @@ export default function Home() {
   return (
     <div style={{ backgroundColor: '#EAEDED', minHeight: '100vh' }}>
       <Header />
-      <main style={{ margin: '0 35px' }}>
+      <main style={{ margin: '0 35px', minHeight: '100%' }}>
         <Box w="100%" h="100%" ref={boxRef} overflowX="hidden">
           <HStack
             spacing="0"
@@ -125,7 +126,41 @@ export default function Home() {
             onClick={handleRightIconClicked}
           />
         </Flex>
-        <Box bg="tomato" w="100%" h="100vh"></Box>
+        <Box w="100%" h="1000vh" transform="translateY(-300px)">
+          <Grid
+            templateColumns={[
+              'repeat(2, 1fr)',
+              'repeat(2, 1fr)',
+              'repeat(2, 1fr)',
+              'repeat(3, 1fr)',
+            ]}
+            gap={6}
+            m="0 50px"
+          >
+            <ItemBox>
+              <Flex flexDir="column" align="center" justify="center">
+                <Text fontSize="xl" textAlign="center">
+                  A Knock at Midnight: A Story of Hope, Justice, and Freedom
+                </Text>
+
+                <Image
+                  src="https://m.media-amazon.com/images/I/41zyNS33aFL.jpg"
+                  alt="img1"
+                  w="200px"
+                  h="250px"
+                />
+              </Flex>
+            </ItemBox>
+            <ItemBox>Hi</ItemBox>
+            <ItemBox>Hi</ItemBox>
+            <ItemBox>Hi</ItemBox>
+            <ItemBox>Hi</ItemBox>
+            <ItemBox>Hi</ItemBox>
+            <ItemBox>Hi</ItemBox>
+            <ItemBox>Hi</ItemBox>
+            <ItemBox>Hi</ItemBox>
+          </Grid>
+        </Box>
       </main>
     </div>
   );

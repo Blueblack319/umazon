@@ -1,6 +1,11 @@
 import { Button } from '@chakra-ui/react';
 
-const CustomBtn: React.FC = ({ children }) => (
+interface CustomBtnProps {
+  children?: React.ReactNode;
+  clicked?: () => void;
+}
+
+const CustomBtn: React.FC<CustomBtnProps> = ({ children, clicked }) => (
   <Button
     bgColor="black"
     color="white"
@@ -13,6 +18,7 @@ const CustomBtn: React.FC = ({ children }) => (
     _focus={{ backgroundColor: 'black' }}
     _active={{ backgroundColor: 'black' }}
     h="100%"
+    onClick={clicked}
   >
     {children}
   </Button>
