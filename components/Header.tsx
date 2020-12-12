@@ -125,7 +125,7 @@ const Header: React.FC = () => {
       >
         <Box
           h="50px"
-          w="200px"
+          minW="170px"
           p="0 20px"
           m="0 10px"
           bgColor="black"
@@ -139,7 +139,7 @@ const Header: React.FC = () => {
             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSG2AwepbH0wji4lVTKbCDhoiSMXCLeNIgcog&usqp=CAU"
             alt="logo"
             h="48px"
-            w="130px"
+            minW="130px"
           />
         </Box>
         <InputGroup
@@ -242,9 +242,7 @@ const Header: React.FC = () => {
                 description: Yup.string()
                   .max(100, 'Must be 100 charaters or less')
                   .required('Description is Required'),
-                img: Yup.string()
-                  .max(100, 'Must be 100 charaters or less')
-                  .required('Image is Required'),
+                img: Yup.mixed().required('Image is Required'),
               })}
               onSubmit={(values, actions) => {
                 setTimeout(() => {
@@ -346,7 +344,7 @@ const Header: React.FC = () => {
                     )}
                   </Field>
                   <Field name="img">
-                    {({ field, form }: any) => (
+                    {({ form }: any) => (
                       <FormControl
                         isInvalid={form.errors.img && form.touched.img}
                       >
