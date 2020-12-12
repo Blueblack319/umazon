@@ -87,7 +87,7 @@ const Header: React.FC = () => {
     setRating(stars);
   };
 
-  const handleSubmitted = ({
+  const handleSubmitted = async ({
     productName,
     cost,
     rating,
@@ -103,10 +103,10 @@ const Header: React.FC = () => {
       description,
       img,
     };
-    const { id } = createProduct(newProduct);
+    const successfulProduct = await createProduct(newProduct);
     toast({
       title: 'Success!',
-      description: `We've added your product ${id}.`,
+      description: `We've added your product ${successfulProduct}.`,
       status: 'success',
       duration: 3000,
       isClosable: true,
@@ -351,7 +351,13 @@ const Header: React.FC = () => {
                         isInvalid={form.errors.img && form.touched.img}
                       >
                         <FormLabel htmlFor="img">Image</FormLabel>
-                        <input type="file" {...field} accept="image/*" />
+                        <input
+                          type="file"
+                          onChange={(e) => {
+                            form.setFieldValue('img', e.target.files![0]);
+                          }}
+                          accept="image/*"
+                        />
                         <br />
                         <ErrorMessage name="img" />
                       </FormControl>

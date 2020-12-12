@@ -1,9 +1,12 @@
 import { useRef, useState, useEffect } from 'react';
+import { GetStaticProps } from 'next';
 import { ArrowLeftIcon, ArrowRightIcon } from '@chakra-ui/icons';
-import { Flex, Box, HStack, Grid, Image, Text } from '@chakra-ui/react';
+import { Flex, Box, HStack, Grid } from '@chakra-ui/react';
 
 import Header from '../components/Header';
-import ItemBox from '../components/ItemBox';
+
+import ItemForSale from '../components/ItemForSale';
+import { getAllProducts } from '../utils/db';
 
 const bgImages = [
   ['/bg6.jpg', '1'],
@@ -18,7 +21,23 @@ const bgImages = [
 
 const slideLength = bgImages.length - 2;
 
-export default function Home() {
+type productType = {
+  id: string;
+  productName: string;
+  cost: string;
+  createdAt: string;
+  description: string;
+  img: string;
+  rating: string;
+  ownerId: string;
+  map: any;
+};
+
+type productGroupType = {
+  [key: string]: productType;
+};
+
+export default function Home({ products }: productGroupType) {
   const boxRef = useRef<HTMLDivElement | null>(null);
   const [slideStyle, setSlideStyle] = useState<React.CSSProperties | undefined>(
     undefined
@@ -134,31 +153,23 @@ export default function Home() {
             gap={6}
             m="0 50px"
           >
-            <ItemBox>
-              <Flex flexDir="column" align="center" justify="center">
-                <Text fontSize="xl" textAlign="center">
-                  A Knock at Midnight: A Story of Hope, Justice, and Freedom
-                </Text>
-
-                <Image
-                  src="https://m.media-amazon.com/images/I/41zyNS33aFL.jpg"
-                  alt="img1"
-                  w="200px"
-                  h="250px"
-                />
-              </Flex>
-            </ItemBox>
-            <ItemBox>Hi</ItemBox>
-            <ItemBox>Hi</ItemBox>
-            <ItemBox>Hi</ItemBox>
-            <ItemBox>Hi</ItemBox>
-            <ItemBox>Hi</ItemBox>
-            <ItemBox>Hi</ItemBox>
-            <ItemBox>Hi</ItemBox>
-            <ItemBox>Hi</ItemBox>
+            {products.map((product: productType) => {
+              return <ItemForSale key={product.id} values={product} />;
+            })}
           </Grid>
         </Box>
       </main>
     </Box>
   );
 }
+
+export const getStaticProps: GetStaticProps = async () => {
+  const products = await getAllProducts();
+
+  return {
+    props: {
+      products,
+    },
+    revalidate: 1,
+  };
+};
