@@ -1,8 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import { auth } from '../../lib/firebase-admin';
 
-import { getAllProducts } from '../../lib/db-admin';
+import { getUserProducts } from '../../lib/db-admin';
 
-export default async (_: NextApiRequest, res: NextApiResponse) => {
-  const products = await getAllProducts();
+export default async (req: NextApiRequest, res: NextApiResponse) => {
+  const { uid } = await auth.verifyIdToken(req.headers.token! as string);
+  const products = await getUserProducts(uid);
   res.status(200).json(products);
 };

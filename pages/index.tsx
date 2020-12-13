@@ -7,6 +7,7 @@ import Header from '../components/Header';
 
 import ItemForSale from '../components/ItemForSale';
 import { getAllProducts } from '../lib/db-admin';
+import { useAuth } from '../lib/auth';
 
 const bgImages = [
   ['/bg6.jpg', '1'],
@@ -38,6 +39,8 @@ type productGroupType = {
 };
 
 export default function Home({ products }: productGroupType) {
+  const { user } = useAuth();
+
   const boxRef = useRef<HTMLDivElement | null>(null);
   const [slideStyle, setSlideStyle] = useState<React.CSSProperties | undefined>(
     undefined

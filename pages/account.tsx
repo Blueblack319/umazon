@@ -1,16 +1,14 @@
-import { Box, Text, Grid, Image } from '@chakra-ui/react';
+import { Box, Text, Grid } from '@chakra-ui/react';
 import useSWR from 'swr';
 
 import Header from '../components/Header';
 import ItemForSale from '../components/ItemForSale';
 import { useAuth } from '../lib/auth';
-import { authService } from '../lib/firebase';
 import fetcher from '../utils/fetcher';
 
-interface accountProps {}
+const account = () => {
+  const { user } = useAuth();
 
-const account: React.FC<accountProps> = ({}) => {
-  const user = useAuth();
   const { data, error } = useSWR(
     user ? ['/api/products', user.token] : null,
     fetcher
