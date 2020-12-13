@@ -6,7 +6,7 @@ import { Flex, Box, HStack, Grid } from '@chakra-ui/react';
 import Header from '../components/Header';
 
 import ItemForSale from '../components/ItemForSale';
-import { getAllProducts } from '../utils/db';
+import { getAllProducts } from '../utils/db-admin';
 
 const bgImages = [
   ['/bg6.jpg', '1'],

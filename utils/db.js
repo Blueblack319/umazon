@@ -1,5 +1,6 @@
 import { firebaseInstance, dbService, storageService } from './firebase';
 import { v4 as uuidv4 } from 'uuid';
+import { compareAsc, compareDesc, parseISO } from 'date-fns';
 
 const storageRef = storageService.ref();
 
@@ -28,13 +29,4 @@ export async function createProduct(data) {
   } catch (err) {
     console.log(err);
   }
-}
-
-export async function getAllProducts() {
-  const snapshot = await dbService.collection('products').get();
-  const products = [];
-
-  snapshot.forEach((doc) => products.push({ id: doc.id, ...doc.data() }));
-
-  return products;
 }
