@@ -36,8 +36,8 @@ import * as Yup from 'yup';
 import Cookies from 'js-cookie';
 
 import CustomBtn from './CustomBtn';
-import { createProduct } from '../utils/db';
-import { useAuth } from '../utils/auth';
+import { createProduct } from '../lib/db';
+import { useAuth } from '../lib/auth';
 
 const searchOptions = (
   <Select

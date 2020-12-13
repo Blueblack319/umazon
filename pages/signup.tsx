@@ -15,7 +15,7 @@ import { useRouter } from 'next/router';
 import * as Yup from 'yup';
 import { useState } from 'react';
 
-import { useAuth } from '../utils/auth';
+import { useAuth } from '../lib/auth';
 import { CustomInputField } from '../components/CustomField';
 
 interface signupProps {}

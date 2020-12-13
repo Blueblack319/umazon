@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
-import { getAllProducts } from '../../utils/db-admin';
+import { getAllProducts } from '../../lib/db-admin';
 
 export default async (_: NextApiRequest, res: NextApiResponse) => {
   const products = await getAllProducts();

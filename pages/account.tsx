@@ -1,15 +1,24 @@
-import { GetStaticProps, GetStaticPropsResult } from 'next';
 import { Box, Text, Grid, Image } from '@chakra-ui/react';
+import useSWR from 'swr';
 
 import Header from '../components/Header';
-import { useAuth } from '../utils/auth';
-import { getUserProducts } from '../utils/db';
-import { authService } from '../utils/firebase';
+import ItemForSale from '../components/ItemForSale';
+import { useAuth } from '../lib/auth';
+import { authService } from '../lib/firebase';
+import fetcher from '../utils/fetcher';
 
 interface accountProps {}
 
 const account: React.FC<accountProps> = ({}) => {
-  const auth = useAuth();
+  const user = useAuth();
+  const { data, error } = useSWR(
+    user ? ['/api/products', user.token] : null,
+    fetcher
+  );
+
+  if (error) return <div>failed to load</div>;
+  if (!data) return <div>loading...</div>;
+
   return (
     <Box bg="#EAEDED" minH="100vh">
       <Header />
@@ -18,43 +27,13 @@ const account: React.FC<accountProps> = ({}) => {
           Items for sale
         </Text>
         <Grid templateColumns="repeat(3, 1fr)" gap={10}>
-          <Box p="10px 20px" minW="350px" h="400px" bg="white">
-            <Text fontSize="2xl">Product Name</Text>
-            <Image
-              boxSize="200px"
-              objectFit="cover"
-              src="https://bit.ly/dan-abramov"
-              alt="example"
-            />
-            <Text>Stock</Text>
-            <Text>Cost</Text>
-            <Text>Description</Text>
-            <Text>Rating</Text>
-            <Text>Sale date</Text>
-          </Box>
-          <Box minW="350px" h="400px" bg="white">
-            Hello
-          </Box>
-          <Box minW="350px" h="400px" bg="white">
-            Hello
-          </Box>
+          {data?.map((product: any) => (
+            <ItemForSale values={product} key={product.id} />
+          ))}
         </Grid>
       </main>
     </Box>
   );
-};
-
-export const getStaticProps: GetStaticProps = async () => {
-  const id = authService.currentUser;
-  console.log(id === null);
-  // const { products } = await getUserProducts(id);
-  // console.log(products);
-
-  return {
-    props: {
-      id,
-    },
-  };
 };
 
 export default account;
