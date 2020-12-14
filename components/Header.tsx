@@ -39,6 +39,7 @@ import Link from 'next/link';
 import CustomBtn from './CustomBtn';
 import { createProduct } from '../lib/db';
 import { useAuth } from '../lib/auth';
+import { useCheckout } from '../utils/checkout';
 
 const searchOptions = (
   <Select
@@ -60,6 +61,7 @@ const searchOptions = (
 const Header: React.FC = () => {
   const router = useRouter();
   const auth = useAuth();
+  const { checkoutItemsNumber } = useCheckout();
   const [isFocus, setIsFocus] = useState<boolean>(false);
   const [rating, setRating] = useState<Array<React.ReactNode>>([
     <StarIcon color="gold" key={-1} />,
@@ -209,7 +211,7 @@ const Header: React.FC = () => {
 
           <CustomBtn>
             <Link href="/checkout">
-              <a>Cart: 0+</a>
+              <a>Cart: {checkoutItemsNumber}+</a>
             </Link>
           </CustomBtn>
           <CustomBtn clicked={onOpen}>
