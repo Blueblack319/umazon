@@ -1,4 +1,4 @@
-import { Box, Text, Image, Flex } from '@chakra-ui/react';
+import { Button, Text, Image, Flex } from '@chakra-ui/react';
 import { format } from 'date-fns';
 
 import Rating from './Rating';
@@ -35,6 +35,7 @@ const ItemForSale = ({ values }: any) => {
       <Text>
         Sales start date: {format(Date.parse(createdAt), 'yyyy-MM-dd')}
       </Text>
+      <Button colorScheme="orange">Add to Bucket</Button>
     </Flex>
   );
 };

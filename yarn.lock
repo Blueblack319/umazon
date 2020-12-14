@@ -1513,6 +1513,13 @@
   dependencies:
     "@chakra-ui/theme-tools" "1.0.1"
 
+"@chakra-ui/theme@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@chakra-ui/theme/-/theme-1.2.1.tgz#11f41ad4323cebc1d64b9bce8f205a9da24db31b"
+  integrity sha512-5hpiPqakIGVaL+ZCxd0wJjaqqgNEjfrAR7GdVZOS018PjmK7qUkQIx+8OmaP3P3niC+NSJ6FhCZXMgM1WVHSUw==
+  dependencies:
+    "@chakra-ui/theme-tools" "1.0.1"
+
 "@chakra-ui/toast@1.1.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@chakra-ui/toast/-/toast-1.1.0.tgz#09bd795378cd77069f634dd2f9efd8e5cffd224d"
