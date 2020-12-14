@@ -1,4 +1,4 @@
-import { Box, Text, Grid } from '@chakra-ui/react';
+import { Box, Text, Grid, Skeleton } from '@chakra-ui/react';
 import useSWR from 'swr';
 
 import Header from '../components/Header';
@@ -15,7 +15,6 @@ const account = () => {
   );
 
   if (error) return <div>failed to load</div>;
-  if (!data) return <div>loading...</div>;
 
   return (
     <Box bg="#EAEDED" minH="100vh">
@@ -25,9 +24,17 @@ const account = () => {
           Items for sale
         </Text>
         <Grid templateColumns="repeat(3, 1fr)" gap={10}>
-          {data?.map((product: any) => (
-            <ItemForSale values={product} key={product.id} />
-          ))}
+          {!data ? (
+            <>
+              <Skeleton height="400px" />
+              <Skeleton height="400px" />
+              <Skeleton height="400px" />
+            </>
+          ) : (
+            data.map((product: any) => (
+              <ItemForSale values={product} key={product.id} />
+            ))
+          )}
         </Grid>
       </main>
     </Box>

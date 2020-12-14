@@ -34,6 +34,7 @@ import { useRouter } from 'next/router';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import Cookies from 'js-cookie';
+import Link from 'next/link';
 
 import CustomBtn from './CustomBtn';
 import { createProduct } from '../lib/db';
@@ -206,7 +207,11 @@ const Header: React.FC = () => {
             </Stack>
           </CustomBtn>
 
-          <CustomBtn>Cart: 0+</CustomBtn>
+          <CustomBtn>
+            <Link href="/checkout">
+              <a>Cart: 0+</a>
+            </Link>
+          </CustomBtn>
           <CustomBtn clicked={onOpen}>
             <Text fontWeight={600}>Sell Item</Text>
           </CustomBtn>

@@ -1,4 +1,7 @@
-import { Box, Text, Image } from '@chakra-ui/react';
+import { Box, Text, Image, Flex } from '@chakra-ui/react';
+import { format } from 'date-fns';
+
+import Rating from './Rating';
 
 const ItemForSale = ({ values }: any) => {
   const {
@@ -13,18 +16,26 @@ const ItemForSale = ({ values }: any) => {
   } = values;
 
   return (
-    <Box p="10px 20px" minW="350px" h="400px" bg="white">
-      <Text fontSize="2xl">{productName}</Text>
-      <Image boxSize="200px" objectFit="cover" src={img} alt="example" />
-      <Text>Stock</Text>
-      <Text>Cost {cost}</Text>
-      <Text>Description: {description}</Text>
-      <Text>Rating: {rating}</Text>
-      <Text>Sale date {createdAt}</Text>
-      <Text>
-        {id} {ownerId}
+    <Flex p="10px 20px" minW="350px" minH="400px" bg="white" flexDir="column">
+      <Text fontSize="2xl" mb="10px">
+        {productName}
       </Text>
-    </Box>
+      <Image
+        w={200}
+        objectFit="contain"
+        src={img}
+        alt="example"
+        alignSelf="center"
+      />
+      <Text>Cost: ${cost}</Text>
+      <Text>
+        Rating: <Rating rating={rating} />
+      </Text>
+      <Text>Stock</Text>
+      <Text>
+        Sales start date: {format(Date.parse(createdAt), 'yyyy-MM-dd')}
+      </Text>
+    </Flex>
   );
 };
 
