@@ -15,7 +15,7 @@ import { Field, Formik, Form } from 'formik';
 import * as Yup from 'yup';
 
 import { CustomInputField } from '../components/CustomField';
-import { useAuth } from '../utils/auth';
+import { useAuth } from '../lib/auth';
 import { useState } from 'react';
 
 interface signinProps {}
