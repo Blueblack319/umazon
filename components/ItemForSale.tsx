@@ -1,11 +1,11 @@
 import { Button, Text, Image, Flex } from '@chakra-ui/react';
 import { format } from 'date-fns';
-import { useCheckout } from '../utils/checkout';
+import { useCart } from '../utils/cart';
 
 import Rating from './Rating';
 
 const ItemForSale = ({ values }: any) => {
-  const checkout = useCheckout();
+  const cart = useCart();
   const {
     productName,
     img,
@@ -18,7 +18,7 @@ const ItemForSale = ({ values }: any) => {
   } = values;
 
   const AddBtnOnClick = async () => {
-    await checkout.addCheckoutItem(values);
+    await cart.addCartItem(values);
   };
 
   return (

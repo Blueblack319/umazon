@@ -39,7 +39,7 @@ import Link from 'next/link';
 import CustomBtn from './CustomBtn';
 import { createProduct } from '../lib/db';
 import { useAuth } from '../lib/auth';
-import { useCheckout } from '../utils/checkout';
+import { useCart } from '../utils/cart';
 
 const searchOptions = (
   <Select
@@ -61,7 +61,8 @@ const searchOptions = (
 const Header: React.FC = () => {
   const router = useRouter();
   const auth = useAuth();
-  const { checkoutItemsNumber } = useCheckout();
+  const cart = useCart();
+  const { cartItemsNumber } = useCart();
   const [isFocus, setIsFocus] = useState<boolean>(false);
   const [rating, setRating] = useState<Array<React.ReactNode>>([
     <StarIcon color="gold" key={-1} />,
@@ -115,6 +116,12 @@ const Header: React.FC = () => {
       isClosable: true,
     });
     onClose();
+  };
+
+  const handleLogoutOnClick = () => {
+    localStorage.removeItem('cartItems');
+    cart.resetCartItems();
+    auth.signout();
   };
 
   return (
@@ -210,14 +217,14 @@ const Header: React.FC = () => {
           </CustomBtn>
 
           <CustomBtn>
-            <Link href="/checkout">
-              <a>Cart: {checkoutItemsNumber}+</a>
+            <Link href="/cart">
+              <a>Cart: {cartItemsNumber}+</a>
             </Link>
           </CustomBtn>
           <CustomBtn clicked={onOpen}>
             <Text fontWeight={600}>Sell Item</Text>
           </CustomBtn>
-          <Button colorScheme="red" onClick={() => auth.signout()}>
+          <Button colorScheme="red" onClick={handleLogoutOnClick}>
             Log out
           </Button>
         </Stack>
