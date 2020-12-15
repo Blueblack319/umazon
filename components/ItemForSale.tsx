@@ -1,9 +1,11 @@
-import { Box, Text, Image, Flex } from '@chakra-ui/react';
+import { Button, Text, Image, Flex } from '@chakra-ui/react';
 import { format } from 'date-fns';
+import { useCart } from '../utils/cart';
 
 import Rating from './Rating';
 
 const ItemForSale = ({ values }: any) => {
+  const cart = useCart();
   const {
     productName,
     img,
@@ -14,6 +16,10 @@ const ItemForSale = ({ values }: any) => {
     id,
     ownerId,
   } = values;
+
+  const AddBtnOnClick = async () => {
+    await cart.addCartItem(values);
+  };
 
   return (
     <Flex p="10px 20px" minW="350px" minH="400px" bg="white" flexDir="column">
@@ -35,6 +41,9 @@ const ItemForSale = ({ values }: any) => {
       <Text>
         Sales start date: {format(Date.parse(createdAt), 'yyyy-MM-dd')}
       </Text>
+      <Button colorScheme="orange" onClick={AddBtnOnClick.bind(values)}>
+        Add to Bucket
+      </Button>
     </Flex>
   );
 };

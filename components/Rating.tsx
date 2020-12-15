@@ -9,10 +9,10 @@ const Rating: React.FC<RatingProps> = ({ rating }) => {
   const stars = [];
 
   for (let i = 0; i < rating; i++) {
-    stars.push(<StarIcon color="gold" />);
+    stars.push(<StarIcon color="gold" key={i} />);
   }
 
-  return <Box display="inline-block">{stars}</Box>;
+  return <>{stars}</>;
 };
 
 export default Rating;

@@ -3,11 +3,10 @@ import { GetStaticProps } from 'next';
 import { ArrowLeftIcon, ArrowRightIcon } from '@chakra-ui/icons';
 import { Flex, Box, HStack, Grid } from '@chakra-ui/react';
 
-import Header from '../components/Header';
-
 import ItemForSale from '../components/ItemForSale';
 import { getAllProducts } from '../lib/db-admin';
 import { useAuth } from '../lib/auth';
+import LayoutWithHeader from '../hoc/LayoutWithHeader';
 
 const bgImages = [
   ['/bg6.jpg', '1'],
@@ -104,65 +103,62 @@ export default function Home({ products }: productGroupType) {
     }
   };
   return (
-    <Box bg="#EAEDED" minH="100vh">
-      <Header />
-      <main style={{ margin: '0 35px', minHeight: '100%' }}>
-        <Box w="100%" h="100%" ref={boxRef} overflowX="hidden" bgColor="#EAEDE">
-          <HStack
-            spacing="0"
-            w={boxRef.current?.clientWidth! * bgImages.length}
-            style={slideStyle}
-          >
-            {bgImages.map((img) => (
-              <Box
-                bgImage={`linear-gradient(rgba(255, 255, 255, 0) 50%, #EAEDED, #EAEDED), url(${img[0]})`}
-                bgRepeat="no-repeat"
-                w={boxRef.current?.clientWidth}
-                minH="calc(100vh - 60px)"
-                key={`${img[1]} + ${new Date().toISOString()}`}
-              ></Box>
-            ))}
-          </HStack>
-        </Box>
-        <Flex
-          h="250px"
-          w="100%"
-          align="center"
-          justify="space-between"
-          p="0 60px"
-          pos="absolute"
-          left="0"
-          top="200px"
+    <LayoutWithHeader>
+      <Box w="100%" h="100%" ref={boxRef} overflowX="hidden" bgColor="#EAEDE">
+        <HStack
+          spacing="0"
+          w={boxRef.current?.clientWidth! * bgImages.length}
+          style={slideStyle}
         >
-          <ArrowLeftIcon
-            fontSize="40px"
-            cursor="pointer"
-            onClick={handleLeftIconClicked}
-          />
-          <ArrowRightIcon
-            fontSize="40px"
-            cursor="pointer"
-            onClick={handleRightIconClicked}
-          />
-        </Flex>
-        <Box w="100%" h="1000vh" transform="translateY(-300px)">
-          <Grid
-            templateColumns={[
-              'repeat(2, 1fr)',
-              'repeat(2, 1fr)',
-              'repeat(2, 1fr)',
-              'repeat(3, 1fr)',
-            ]}
-            gap={6}
-            m="0 50px"
-          >
-            {products.map((product: productType) => {
-              return <ItemForSale key={product.id} values={product} />;
-            })}
-          </Grid>
-        </Box>
-      </main>
-    </Box>
+          {bgImages.map((img) => (
+            <Box
+              bgImage={`linear-gradient(rgba(255, 255, 255, 0) 50%, #EAEDED, #EAEDED), url(${img[0]})`}
+              bgRepeat="no-repeat"
+              w={boxRef.current?.clientWidth}
+              minH="calc(100vh - 60px)"
+              key={`${img[1]} + ${new Date().toISOString()}`}
+            ></Box>
+          ))}
+        </HStack>
+      </Box>
+      <Flex
+        h="250px"
+        w="100%"
+        align="center"
+        justify="space-between"
+        p="0 60px"
+        pos="absolute"
+        left="0"
+        top="200px"
+      >
+        <ArrowLeftIcon
+          fontSize="40px"
+          cursor="pointer"
+          onClick={handleLeftIconClicked}
+        />
+        <ArrowRightIcon
+          fontSize="40px"
+          cursor="pointer"
+          onClick={handleRightIconClicked}
+        />
+      </Flex>
+      <Box w="100%" h="1000vh" transform="translateY(-300px)">
+        <Grid
+          templateColumns={[
+            'repeat(2, 1fr)',
+            'repeat(2, 1fr)',
+            'repeat(2, 1fr)',
+            'repeat(3, 1fr)',
+          ]}
+          gap={6}
+          m="0 50px"
+        >
+          {products.map((product: productType) => {
+            return <ItemForSale key={product.id} values={product} />;
+          })}
+        </Grid>
+      </Box>
+    </LayoutWithHeader>
   );
 }
 
