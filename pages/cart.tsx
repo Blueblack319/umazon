@@ -8,13 +8,41 @@ import {
   Button,
   Image,
 } from '@chakra-ui/react';
+import { useState } from 'react';
+// import { GetServerSideProps, GetServerSidePropsResult } from 'next';
 import { format } from 'date-fns';
-import Rating from '../components/Rating';
 
+import Rating from '../components/Rating';
 import LayoutWithHeader from '../hoc/LayoutWithHeader';
 import { useCart } from '../utils/cart';
+import { fetchPostJSON } from '../utils/api-helpers';
+import getStripe from '../utils/get-stripejs';
+
 const Cart = () => {
+  const [loading, setLoading] = useState<boolean>(false);
   const { cartItems, cartItemsTotal, cartItemsNumber } = useCart();
+
+  const handleCheckout = async () => {
+    setLoading(true);
+    const response = await fetchPostJSON('/api/checkout_sessions', {
+      amount: cartItemsTotal,
+    });
+    if (response.statusCode === 500) {
+      console.error(response.messsage);
+      return;
+    }
+
+    // Redirect to Checkout.
+    const stripe = await getStripe();
+    const { error } = await stripe!.redirectToCheckout({
+      // Make the id field from the Checkout Session creation API response
+      // available to this file, so you can provide it as parameter here
+      // instead of the {{CHECKOUT_SESSION_ID}} placeholder.
+      sessionId: response.id,
+    });
+    console.warn(error.message);
+    setLoading(false);
+  };
 
   return (
     <LayoutWithHeader>
@@ -28,10 +56,10 @@ const Cart = () => {
           </Flex>
           <Divider />
           {cartItems.map((item: productType) => (
-            <>
+            <Box key={item.id} w="100%">
               <ItemContainer {...item} />
               <Divider />
-            </>
+            </Box>
           ))}
         </VStack>
         <Box w="300px" pos="relative" alignSelf="flex-start">
@@ -49,7 +77,13 @@ const Cart = () => {
             <Text fontSize="xl" fontWeight={600} display="inline-block">
               ${cartItemsTotal}
             </Text>
-            <Button colorScheme="yellow" w="100%" mt="20px">
+            <Button
+              colorScheme="yellow"
+              w="100%"
+              mt="20px"
+              onClick={handleCheckout}
+              disabled={loading}
+            >
               Process to Checkout
             </Button>
           </Box>
@@ -80,7 +114,7 @@ const ItemContainer: React.FC<productType> = ({
   rating,
   ownerId,
 }) => (
-  <Flex w="100%">
+  <Flex w="100%" m="10px 0">
     <Box w={200}>
       <Image src={img} alt="item-image" />
     </Box>
@@ -111,3 +145,16 @@ const ItemContainer: React.FC<productType> = ({
 );
 
 export default Cart;
+
+// export const getServerSideProps: GetServerSideProps = async (
+//   ctx
+// ): Promise<GetServerSidePropsResult<{ [key: string]: any }>> => {
+//   const num = 0;
+//   console.log(ctx);
+
+//   return {
+//     props: {
+//       num,
+//     },
+//   };
+// };

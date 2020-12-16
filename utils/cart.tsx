@@ -34,7 +34,7 @@ function useProvideCart() {
     }
     const subTotal = (cartItems as any[]).reduce(
       (accumulator, currentValue) => {
-        return accumulator + parseInt(currentValue.cost);
+        return accumulator + parseFloat(currentValue.cost);
       },
       0
     );
