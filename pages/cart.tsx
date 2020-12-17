@@ -9,7 +9,6 @@ import {
   Image,
 } from '@chakra-ui/react';
 import { useState } from 'react';
-// import { GetServerSideProps, GetServerSidePropsResult } from 'next';
 import { format } from 'date-fns';
 
 import Rating from '../components/Rating';
@@ -145,16 +144,3 @@ const ItemContainer: React.FC<productType> = ({
 );
 
 export default Cart;
-
-// export const getServerSideProps: GetServerSideProps = async (
-//   ctx
-// ): Promise<GetServerSidePropsResult<{ [key: string]: any }>> => {
-//   const num = 0;
-//   console.log(ctx);
-
-//   return {
-//     props: {
-//       num,
-//     },
-//   };
-// };

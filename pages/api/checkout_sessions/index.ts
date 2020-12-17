@@ -13,6 +13,7 @@ export default async function handler(
 ) {
   if (req.method === 'POST') {
     const amount: number = req.body.amount;
+
     try {
       // Validate the amount that was passed from the client.
       if (!(amount >= MIN_AMOUNT && amount <= MAX_AMOUNT)) {
@@ -30,7 +31,7 @@ export default async function handler(
             quantity: 1,
           },
         ],
-        success_url: `${req.headers.origin}/result?session_id={CHECKOUT_SESSION_ID}`,
+        success_url: `${req.headers.origin}/orders?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${req.headers.origin}/cart`,
       };
       const checkoutSession: Stripe.Checkout.Session = await stripe.checkout.sessions.create(
@@ -38,8 +39,11 @@ export default async function handler(
       );
       res.status(200).json(checkoutSession);
     } catch (err) {
-      res.setHeader('Allow', 'POST');
-      res.status(405).end('Method Not Allowed');
+      console.log(err);
+      res.status(500).json({ statusCode: 500, message: err.message });
     }
+  } else {
+    res.setHeader('Allow', 'POST');
+    res.status(405).end('Method Not Allowed');
   }
 }
