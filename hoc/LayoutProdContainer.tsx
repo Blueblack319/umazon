@@ -22,6 +22,11 @@ const LayoutProdContainer: React.FC<LayoutProdContainerProps> = ({
   products,
   title,
 }) => {
+  let keyCount = 0;
+  const getKey = () => {
+    return keyCount++;
+  };
+
   return (
     <VStack
       flex={1}
@@ -39,7 +44,7 @@ const LayoutProdContainer: React.FC<LayoutProdContainerProps> = ({
       </Flex>
       <Divider />
       {products.map((item: productType) => (
-        <Box key={item.id} w="100%">
+        <Box key={getKey()} w="100%">
           <ItemContainer {...item} />
           <Divider />
         </Box>

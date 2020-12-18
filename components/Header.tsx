@@ -223,7 +223,7 @@ const Header: React.FC = () => {
           </CustomBtn>
 
           <CustomBtn>
-            <Link href="/cart">
+            <Link href={Cookies.get('umazon-auth') ? '/cart' : '/signin'}>
               <a>Cart: {cartItemsNumber}+</a>
             </Link>
           </CustomBtn>
