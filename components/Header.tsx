@@ -207,7 +207,13 @@ const Header: React.FC = () => {
             </Stack>
           </CustomBtn>
 
-          <CustomBtn>
+          <CustomBtn
+            clicked={() =>
+              Cookies.get('umazon-auth')
+                ? router.push('/orders')
+                : router.push('/signin')
+            }
+          >
             <Stack spacing={0} align="baseline">
               <Text fontWeight={400} fontSize={13}>
                 returns
