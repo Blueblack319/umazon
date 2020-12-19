@@ -4,7 +4,6 @@ import { AppProps } from 'next/app';
 import '../styles/globals.css';
 import { AuthProvider } from '../lib/auth';
 import { CartProvider } from '../utils/cart';
-import Header from '../components/Header';
 // import theme from '../theme';
 
 function MyApp({ Component, pageProps }: AppProps) {
