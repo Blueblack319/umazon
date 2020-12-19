@@ -1,11 +1,18 @@
-import { Button, Text, Image, Flex } from '@chakra-ui/react';
+import { Button, Text, Image, Flex, useDisclosure } from '@chakra-ui/react';
 import { format } from 'date-fns';
+import { useRouter } from 'next/router';
+
 import { useCart } from '../utils/cart';
 
 import Rating from './Rating';
+import SellModal from './SellModal';
 
-const ItemForSale = ({ values }: any) => {
+const ItemForSale = ({ values }) => {
   const cart = useCart();
+  const router = useRouter();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  console.log(router.pathname);
+
   const {
     productName,
     img,
@@ -17,34 +24,44 @@ const ItemForSale = ({ values }: any) => {
     ownerId,
   } = values;
 
-  const AddBtnOnClick = async () => {
+  const addBtnOnClick = async () => {
     await cart.addCartItem(values);
   };
 
   return (
-    <Flex p="10px 20px" minW="350px" minH="400px" bg="white" flexDir="column">
-      <Text fontSize="2xl" mb="10px">
-        {productName}
-      </Text>
-      <Image
-        w={200}
-        objectFit="contain"
-        src={img}
-        alt="example"
-        alignSelf="center"
-      />
-      <Text>Cost: ${cost}</Text>
-      <Text>
-        Rating: <Rating rating={rating} />
-      </Text>
-      <Text>Stock</Text>
-      <Text>
-        Sales start date: {format(Date.parse(createdAt), 'yyyy-MM-dd')}
-      </Text>
-      <Button colorScheme="orange" onClick={AddBtnOnClick.bind(values)}>
-        Add to Bucket
-      </Button>
-    </Flex>
+    <>
+      <Flex p="10px 20px" minW="350px" minH="400px" bg="white" flexDir="column">
+        <Text fontSize="2xl" mb="10px">
+          {productName}
+        </Text>
+        <Image
+          w={200}
+          objectFit="contain"
+          src={img}
+          alt="example"
+          alignSelf="center"
+        />
+        <Text>Cost: ${cost}</Text>
+        <Text>
+          Rating: <Rating rating={rating} />
+        </Text>
+        <Text>Description: {description}</Text>
+        <Text>In stock</Text>
+        <Text>
+          Sales start date: {format(Date.parse(createdAt), 'yyyy-MM-dd')}
+        </Text>
+        {router.pathname === '/account' ? (
+          <Button colorScheme="yellow" onClick={onOpen}>
+            Edit Item
+          </Button>
+        ) : (
+          <Button colorScheme="orange" onClick={addBtnOnClick.bind(values)}>
+            Add to Bucket
+          </Button>
+        )}
+      </Flex>
+      <SellModal isOpen={isOpen} onClose={onClose} values={values} />
+    </>
   );
 };
 
