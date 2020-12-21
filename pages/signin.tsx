@@ -29,9 +29,12 @@ const signin: React.FC<signinProps> = ({}) => {
   const boxBg = useColorModeValue('white', 'gray.700');
   const bg = useColorModeValue('#EAEDED', '#1A202C');
 
-  const handleGithubClicked = async () => {
-    await auth.signinWithGithub();
-    router.push('/');
+  const handleGithubSignin = async () => {
+    await auth.signinWithGithub('/');
+  };
+
+  const handleGoogleSignin = async () => {
+    await auth.signinWithGoogle('/');
   };
 
   return (
@@ -122,11 +125,16 @@ const signin: React.FC<signinProps> = ({}) => {
                   mt={6}
                   w="100%"
                   colorScheme="gray"
-                  onClick={handleGithubClicked}
+                  onClick={handleGithubSignin}
                 >
                   Continue with Github
                 </Button>
-                <Button mt={4} w="100%" colorScheme="red">
+                <Button
+                  mt={4}
+                  w="100%"
+                  colorScheme="red"
+                  onClick={handleGoogleSignin}
+                >
                   Continue with Google
                 </Button>
 

@@ -269,8 +269,7 @@ const SellModal: React.FC<SellModalProps> = ({ isOpen, onClose, values }) => {
                       >
                         <FormLabel htmlFor="quantity">Quantity</FormLabel>
                         <NumberInput
-                          precision={2}
-                          step={0.2}
+                          step={1}
                           onChange={(value) =>
                             props.setFieldValue(field.name, value)
                           }

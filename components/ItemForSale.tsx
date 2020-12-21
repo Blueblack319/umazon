@@ -80,7 +80,7 @@ const ItemForSale = ({ values }) => {
           </>
         ) : (
           <HStack>
-            <NumberInput defaultValue={0} min={0} max={quantity}>
+            <NumberInput defaultValue={0} min={0} max={quantity} step={1}>
               <NumberInputField ref={quantityRef} />
               <NumberInputStepper>
                 <NumberIncrementStepper />
