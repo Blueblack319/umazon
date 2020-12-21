@@ -17,6 +17,8 @@ import {
   NumberDecrementStepper,
   NumberInputStepper,
   useToast,
+  InputGroup,
+  InputLeftAddon,
 } from '@chakra-ui/react';
 import { Formik, Field, Form, ErrorMessage, FormikProps } from 'formik';
 import * as Yup from 'yup';
@@ -59,6 +61,7 @@ const SellModal: React.FC<SellModalProps> = ({ isOpen, onClose, values }) => {
     rating,
     description,
     img,
+    quantity,
   }: any) => {
     const newProduct = {
       ownerId: auth.user.uid,
@@ -66,16 +69,17 @@ const SellModal: React.FC<SellModalProps> = ({ isOpen, onClose, values }) => {
       productName,
       cost,
       rating,
+      quantity,
       description,
       img,
     };
-    const successfulProduct = values.id
+    const successfulProduct = values
       ? await editProduct(newProduct, values.id)
       : await createProduct(newProduct);
     toast({
       title: 'Success!',
       description: `We've ${
-        values.id ? 'edited' : 'added'
+        values ? 'edited' : 'added'
       } your product ${successfulProduct}.`,
       status: 'success',
       duration: 3000,
@@ -94,9 +98,6 @@ const SellModal: React.FC<SellModalProps> = ({ isOpen, onClose, values }) => {
     }
     setRating(stars);
   };
-
-  const format = (val) => `$` + val;
-  const parse = (val) => val.replace(/^\$/, '');
 
   useEffect(() => {
     if (values?.rating) {
@@ -181,28 +182,32 @@ const SellModal: React.FC<SellModalProps> = ({ isOpen, onClose, values }) => {
                     );
                   }}
                 </Field>
-                <Field name="cost" type="text">
+                <Field name="cost">
                   {({ field, form }: any) => (
                     <FormControl
                       isInvalid={form.errors.cost && form.touched.cost}
                     >
                       <FormLabel htmlFor="cost">Cost</FormLabel>
-                      <NumberInput
-                        id={field.name}
-                        precision={2}
-                        step={0.2}
-                        onChange={(valueString) =>
-                          props.setFieldValue(field.name, parse(valueString))
-                        }
-                        onBlur={props.handleBlur}
-                        value={format(field.value)}
-                      >
-                        <NumberInputField />
-                        <NumberInputStepper>
-                          <NumberIncrementStepper />
-                          <NumberDecrementStepper />
-                        </NumberInputStepper>
-                      </NumberInput>
+                      <InputGroup>
+                        <InputLeftAddon children="$" />
+                        <NumberInput
+                          id={field.name}
+                          precision={2}
+                          step={0.2}
+                          onChange={(valueString) =>
+                            props.setFieldValue(field.name, valueString)
+                          }
+                          onBlur={props.handleBlur}
+                          value={field.value}
+                        >
+                          <NumberInputField />
+                          <NumberInputStepper>
+                            <NumberIncrementStepper />
+                            <NumberDecrementStepper />
+                          </NumberInputStepper>
+                        </NumberInput>
+                      </InputGroup>
+
                       <ErrorMessage name="cost" />
                     </FormControl>
                   )}
@@ -297,7 +302,6 @@ const SellModal: React.FC<SellModalProps> = ({ isOpen, onClose, values }) => {
                         }}
                         accept="image/*"
                         id={field.name}
-                        value={field.value}
                       />
                       <br />
                       <ErrorMessage name="img" />

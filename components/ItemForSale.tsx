@@ -11,7 +11,6 @@ const ItemForSale = ({ values }) => {
   const cart = useCart();
   const router = useRouter();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  console.log(router.pathname);
 
   const {
     productName,
@@ -20,6 +19,7 @@ const ItemForSale = ({ values }) => {
     description,
     rating,
     createdAt,
+    quantity,
     id,
     ownerId,
   } = values;
@@ -46,7 +46,11 @@ const ItemForSale = ({ values }) => {
           Rating: <Rating rating={rating} />
         </Text>
         <Text>Description: {description}</Text>
-        <Text>In stock</Text>
+        {quantity > 10 ? (
+          <Text>In stock</Text>
+        ) : (
+          <Text color="red">Less than 10</Text>
+        )}
         <Text>
           Sales start date: {format(Date.parse(createdAt), 'yyyy-MM-dd')}
         </Text>
