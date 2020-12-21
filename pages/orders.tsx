@@ -65,7 +65,7 @@ const Orders = ({ ordersAll, uid }) => {
       });
   };
   useEffect(() => {
-    if (data && productsOrdered === null) {
+    if (data && productsOrdered === null && cartItems) {
       try {
         orderAndRetrieve(cartItems, uid);
       } catch (err) {

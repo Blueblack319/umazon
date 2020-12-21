@@ -50,7 +50,10 @@ const Cart = () => {
               Subtotal ({cartItemsNumber} items): &nbsp;
             </Text>
             <Text fontSize="xl" fontWeight={600} display="inline-block">
-              ${cartItemsTotal}
+              {new Intl.NumberFormat('ko', {
+                style: 'currency',
+                currency: 'USD',
+              }).format(cartItemsTotal)}
             </Text>
             <Button
               colorScheme="yellow"

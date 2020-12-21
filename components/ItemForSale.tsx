@@ -1,6 +1,19 @@
-import { Button, Text, Image, Flex, useDisclosure } from '@chakra-ui/react';
+import {
+  Button,
+  Text,
+  Image,
+  Flex,
+  useDisclosure,
+  HStack,
+  NumberInput,
+  NumberInputField,
+  NumberIncrementStepper,
+  NumberInputStepper,
+  NumberDecrementStepper,
+} from '@chakra-ui/react';
 import { format } from 'date-fns';
 import { useRouter } from 'next/router';
+import { useRef, useEffect } from 'react';
 
 import { useCart } from '../utils/cart';
 
@@ -12,7 +25,7 @@ const ItemForSale = ({ values }) => {
   const cart = useCart();
   const router = useRouter();
   const { isOpen, onOpen, onClose } = useDisclosure();
-
+  const quantityRef = useRef(null);
   const {
     productName,
     img,
@@ -26,8 +39,11 @@ const ItemForSale = ({ values }) => {
   } = values;
 
   const addBtnOnClick = async () => {
+    values['quantity'] = parseInt(quantityRef.current.value);
     await cart.addCartItem(values);
   };
+  const displayStock =
+    quantity === 0 ? <Text>Out of Stock</Text> : <Text>In Stock</Text>;
 
   return (
     <>
@@ -47,10 +63,10 @@ const ItemForSale = ({ values }) => {
           Rating: <Rating rating={rating} />
         </Text>
         <Text>Description: {description}</Text>
-        {quantity > 10 ? (
-          <Text>In stock</Text>
+        {router.pathname === '/account' ? (
+          <Text color="red">Quantity: {quantity}</Text>
         ) : (
-          <Text color="red">Less than 10</Text>
+          displayStock
         )}
         <Text>
           Sales start date: {format(Date.parse(createdAt), 'yyyy-MM-dd')}
@@ -63,9 +79,19 @@ const ItemForSale = ({ values }) => {
             <CustomAlertDialog productId={id} ownerId={ownerId} />
           </>
         ) : (
-          <Button colorScheme="orange" onClick={addBtnOnClick.bind(values)}>
-            Add to Bucket
-          </Button>
+          <HStack>
+            <NumberInput defaultValue={0} min={0} max={quantity}>
+              <NumberInputField ref={quantityRef} />
+              <NumberInputStepper>
+                <NumberIncrementStepper />
+                <NumberDecrementStepper />
+              </NumberInputStepper>
+            </NumberInput>
+
+            <Button colorScheme="orange" onClick={addBtnOnClick.bind(values)}>
+              Add to Bucket
+            </Button>
+          </HStack>
         )}
       </Flex>
       <SellModal isOpen={isOpen} onClose={onClose} values={values} />
