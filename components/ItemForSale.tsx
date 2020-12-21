@@ -6,6 +6,7 @@ import { useCart } from '../utils/cart';
 
 import Rating from './Rating';
 import SellModal from './SellModal';
+import CustomAlertDialog from '../components/CustomAlertDialog';
 
 const ItemForSale = ({ values }) => {
   const cart = useCart();
@@ -55,9 +56,12 @@ const ItemForSale = ({ values }) => {
           Sales start date: {format(Date.parse(createdAt), 'yyyy-MM-dd')}
         </Text>
         {router.pathname === '/account' ? (
-          <Button colorScheme="yellow" onClick={onOpen}>
-            Edit Item
-          </Button>
+          <>
+            <Button colorScheme="yellow" onClick={onOpen} mb="10px">
+              Edit Item
+            </Button>
+            <CustomAlertDialog productId={id} ownerId={ownerId} />
+          </>
         ) : (
           <Button colorScheme="orange" onClick={addBtnOnClick.bind(values)}>
             Add to Bucket
