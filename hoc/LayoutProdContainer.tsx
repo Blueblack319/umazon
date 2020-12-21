@@ -1,14 +1,15 @@
 import { VStack, Flex, Divider, Text, Box } from '@chakra-ui/react';
-import ItemContainer from '../components/ItemContainer';
+import ShoppingCart from '../components/ShoppingCart';
 
 type productType = {
   id: string;
   productName: string;
-  cost: string;
+  cost: number;
   createdAt: string;
   description: string;
   img: string;
   rating: number;
+  quantity: number;
   ownerId: string;
   map: any;
 };
@@ -45,7 +46,7 @@ const LayoutProdContainer: React.FC<LayoutProdContainerProps> = ({
       <Divider />
       {products.map((item: productType) => (
         <Box key={getKey()} w="100%">
-          <ItemContainer {...item} />
+          <ShoppingCart {...item} />
           <Divider />
         </Box>
       ))}
