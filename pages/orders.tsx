@@ -1,6 +1,6 @@
-import { GetServerSideProps } from 'next';
+import { GetServerSideProps, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Box, Text, HStack, Button, VStack } from '@chakra-ui/react';
 import Cookies from 'cookies';
 
@@ -11,6 +11,7 @@ import { useCheckoutSession } from '../utils/hooks';
 import { useAuth } from '../lib/auth';
 import fetcher from '../utils/fetcher';
 import LayoutProdContainer from '../hoc/LayoutProdContainer';
+import { auth } from '../lib/firebase-admin';
 
 type productType = {
   id: string;
@@ -27,41 +28,51 @@ type productType = {
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const cookies = new Cookies(ctx.req, ctx.res);
   const token = cookies.get('token');
+  const { uid } = await auth.verifyIdToken(token);
+  if (ctx.query.session_id) {
+  }
   const ordersAll = await fetcher('http://localhost:3000/api/ordered', token);
   return {
     props: {
       ordersAll,
+      uid,
     },
   };
 };
 
-const Orders = ({ ordersAll }) => {
+const Orders = ({ ordersAll, uid }) => {
   const [productsOrdered, setProductsOrdered] = useState(null);
   const router = useRouter();
-  const { cartItems } = useCart();
-  const { user } = useAuth();
+  const { cartItems, resetCartItems } = useCart();
 
   const { data, error } = useCheckoutSession(router.query.session_id);
 
   if (error) return <Box>Failed to load</Box>;
 
   const orderAndRetrieve = async (cartItems, uid) => {
-    console.log(cartItems, uid);
-    const response = await fetchPostJSON('/api/ordering', {
+    await fetchPostJSON('/api/ordering', {
       uid,
       orderedProducts: cartItems,
-    });
-
-    setProductsOrdered(response);
+    })
+      .then((res) => {
+        localStorage.removeItem('cartItems');
+        resetCartItems();
+        setProductsOrdered(res);
+      })
+      .catch((err) => {
+        console.log(err.message);
+        throw new Error(err.message);
+      });
   };
-
-  if (data && productsOrdered === null && user) {
-    try {
-      orderAndRetrieve(cartItems, user.uid);
-    } catch (err) {
-      console.log(err);
+  useEffect(() => {
+    if (data && productsOrdered === null) {
+      try {
+        orderAndRetrieve(cartItems, uid);
+      } catch (err) {
+        console.log(err);
+      }
     }
-  }
+  }, [data]);
 
   return (
     <LayoutWithHeader>
@@ -73,7 +84,9 @@ const Orders = ({ ordersAll }) => {
               products={productsOrdered}
             />
           ) : null}
-          <LayoutProdContainer title="All Orders" products={ordersAll} />
+          {ordersAll.length !== 0 ? (
+            <LayoutProdContainer title="All Orders" products={ordersAll} />
+          ) : null}
         </VStack>
         <Box w="300px" pos="relative" alignSelf="flex-start">
           <Box

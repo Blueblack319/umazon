@@ -1,7 +1,6 @@
-import { Box, Text, Grid, Skeleton } from '@chakra-ui/react';
+import { Text, Grid, Skeleton } from '@chakra-ui/react';
 import useSWR from 'swr';
 
-import Header from '../components/Header';
 import ItemForSale from '../components/ItemForSale';
 import LayoutWithHeader from '../hoc/LayoutWithHeader';
 import { useAuth } from '../lib/auth';

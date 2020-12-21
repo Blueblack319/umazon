@@ -142,7 +142,7 @@ export default function Home({ products }: productGroupType) {
           onClick={handleRightIconClicked}
         />
       </Flex>
-      <Box w="100%" h="1000vh" transform="translateY(-300px)">
+      <Box w="100%" h="100%" transform="translateY(-300px)">
         <Grid
           templateColumns={[
             'repeat(2, 1fr)',
