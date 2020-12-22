@@ -8,7 +8,7 @@ const fetcher = async (url: string, token: string) => {
 
     return res.json();
   } catch (err) {
-    console.log(err);
+    throw new Error(err.message);
   }
 };
 

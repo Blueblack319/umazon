@@ -47,7 +47,6 @@ const Orders = ({ ordersAll, uid }) => {
         setProductsOrdered(res);
       })
       .catch((err) => {
-        console.log(err.message);
         throw new Error(err.message);
       });
   };
@@ -56,7 +55,7 @@ const Orders = ({ ordersAll, uid }) => {
       try {
         orderAndRetrieve(cartItems, uid);
       } catch (err) {
-        console.log(err);
+        throw new Error(err.message);
       }
     }
   }, [data]);
