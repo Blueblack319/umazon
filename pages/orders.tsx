@@ -12,13 +12,15 @@ import fetcher from '../utils/fetcher';
 import LayoutProdContainer from '../hoc/LayoutProdContainer';
 import { auth } from '../lib/firebase-admin';
 
+const BASE_URL = 'https://amazon-clone-btysbuc8h.vercel.app';
+
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const cookies = new Cookies(ctx.req, ctx.res);
   const token = cookies.get('token');
   const { uid } = await auth.verifyIdToken(token);
   if (ctx.query.session_id) {
   }
-  const ordersAll = await fetcher('http://localhost:3000/api/ordered', token);
+  const ordersAll = await fetcher(`${BASE_URL}/api/ordered`, token);
   return {
     props: {
       ordersAll,
