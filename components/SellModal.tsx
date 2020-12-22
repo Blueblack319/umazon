@@ -50,9 +50,9 @@ const SellModal: React.FC<SellModalProps> = ({ isOpen, onClose, values }) => {
   const auth = useAuth();
   const toast = useToast();
   const [rating, setRating] = useState<Array<React.ReactNode>>([
-    <StarIcon color="gold" key={-1} />,
-    <StarIcon color="gold" key={-1} />,
-    <StarIcon color="gold" key={-1} />,
+    <StarIcon color="gold" key={0} />,
+    <StarIcon color="gold" key={1} />,
+    <StarIcon color="gold" key={2} />,
   ]);
 
   const handleSubmitted = async ({
@@ -220,7 +220,10 @@ const SellModal: React.FC<SellModalProps> = ({ isOpen, onClose, values }) => {
                       <FormLabel htmlFor="rating">Rating</FormLabel>
                       <Select
                         onChange={(e) => {
-                          props.setFieldValue(field.name, e.target.value);
+                          props.setFieldValue(
+                            field.name,
+                            parseInt(e.target.value)
+                          );
                           handleRatingChanged(e);
                         }}
                         value={field.value}
@@ -260,33 +263,29 @@ const SellModal: React.FC<SellModalProps> = ({ isOpen, onClose, values }) => {
                   )}
                 </Field>
                 <Field name="quantity" type="number">
-                  {({ field, form }: any) => {
-                    return (
-                      <FormControl
-                        isInvalid={
-                          form.errors.quantity && form.touched.quantity
+                  {({ field, form }: any) => (
+                    <FormControl
+                      isInvalid={form.errors.quantity && form.touched.quantity}
+                    >
+                      <FormLabel htmlFor="quantity">Quantity</FormLabel>
+                      <NumberInput
+                        step={1}
+                        onChange={(value) =>
+                          props.setFieldValue(field.name, parseInt(value))
                         }
+                        onBlur={props.handleBlur}
+                        id={field.name}
+                        value={field.value}
                       >
-                        <FormLabel htmlFor="quantity">Quantity</FormLabel>
-                        <NumberInput
-                          step={1}
-                          onChange={(value) =>
-                            props.setFieldValue(field.name, value)
-                          }
-                          onBlur={props.handleBlur}
-                          id={field.name}
-                          value={field.value}
-                        >
-                          <NumberInputField />
-                          <NumberInputStepper>
-                            <NumberIncrementStepper />
-                            <NumberDecrementStepper />
-                          </NumberInputStepper>
-                        </NumberInput>
-                        <ErrorMessage name="quantity" />
-                      </FormControl>
-                    );
-                  }}
+                        <NumberInputField />
+                        <NumberInputStepper>
+                          <NumberIncrementStepper />
+                          <NumberDecrementStepper />
+                        </NumberInputStepper>
+                      </NumberInput>
+                      <ErrorMessage name="quantity" />
+                    </FormControl>
+                  )}
                 </Field>
                 <Field name="img">
                   {({ field, form }: any) => (

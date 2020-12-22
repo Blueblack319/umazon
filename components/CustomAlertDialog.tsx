@@ -31,7 +31,7 @@ const CustomAlertDialog: React.FC<CustomAlertDialogProps> = ({
   return (
     <>
       <Button colorScheme="red" onClick={() => setIsOpen(true)}>
-        Delete Customer
+        Delete Product
       </Button>
 
       <AlertDialog
@@ -42,7 +42,7 @@ const CustomAlertDialog: React.FC<CustomAlertDialogProps> = ({
         <AlertDialogOverlay>
           <AlertDialogContent>
             <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              Delete Customer
+              Delete Product
             </AlertDialogHeader>
 
             <AlertDialogBody>

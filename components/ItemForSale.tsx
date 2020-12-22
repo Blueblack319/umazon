@@ -74,7 +74,7 @@ const ItemForSale = ({ values }) => {
         {router.pathname === '/account' ? (
           <>
             <Button colorScheme="yellow" onClick={onOpen} mb="10px">
-              Edit Item
+              Edit Product
             </Button>
             <CustomAlertDialog productId={id} ownerId={ownerId} />
           </>
