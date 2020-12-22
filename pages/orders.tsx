@@ -1,29 +1,16 @@
-import { GetServerSideProps, GetStaticProps } from 'next';
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { Box, Text, HStack, Button, VStack } from '@chakra-ui/react';
+import { Box, Text, HStack, VStack } from '@chakra-ui/react';
 import Cookies from 'cookies';
 
-import { fetchGetJSON, fetchPostJSON } from '../utils/api-helpers';
+import { fetchPostJSON } from '../utils/api-helpers';
 import { useCart } from '../utils/cart';
 import LayoutWithHeader from '../hoc/LayoutWithHeader';
 import { useCheckoutSession } from '../utils/hooks';
-import { useAuth } from '../lib/auth';
 import fetcher from '../utils/fetcher';
 import LayoutProdContainer from '../hoc/LayoutProdContainer';
 import { auth } from '../lib/firebase-admin';
-
-type productType = {
-  id: string;
-  productName: string;
-  cost: string;
-  createdAt: string;
-  description: string;
-  img: string;
-  rating: number;
-  ownerId: string;
-  map: any;
-};
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const cookies = new Cookies(ctx.req, ctx.res);
