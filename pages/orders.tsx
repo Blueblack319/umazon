@@ -18,10 +18,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const cookies = new Cookies(ctx.req, ctx.res);
   const token = cookies.get('token');
   const { uid } = await auth.verifyIdToken(token);
-  const orderDetails = await fetcher(
-    'http://localhost:3000/api/ordered',
-    token
-  );
+  const orderDetails = await fetcher(`${BASE_URL}/api/ordered`, token);
   return {
     props: {
       orderDetails,
