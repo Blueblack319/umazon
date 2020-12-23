@@ -10,6 +10,7 @@ import {
   NumberIncrementStepper,
   NumberInputStepper,
   NumberDecrementStepper,
+  Box,
 } from '@chakra-ui/react';
 import { format } from 'date-fns';
 import { useRouter } from 'next/router';
@@ -21,6 +22,7 @@ import Rating from './Rating';
 import SellModal from './SellModal';
 import CustomAlertDialog from '../components/CustomAlertDialog';
 import { useAuth } from '../lib/auth';
+import { motion } from 'framer-motion';
 
 const ItemForSale = ({ values }) => {
   const cart = useCart();
@@ -47,8 +49,10 @@ const ItemForSale = ({ values }) => {
   const displayStock =
     quantity === 0 ? <Text>Out of Stock</Text> : <Text>In Stock</Text>;
 
+  const HoverBox = motion.custom(Box);
+
   return (
-    <>
+    <HoverBox whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
       <Flex p="10px 20px" minW="350px" minH="400px" bg="white" flexDir="column">
         <Text fontSize="2xl" mb="10px">
           {productName}
@@ -101,7 +105,7 @@ const ItemForSale = ({ values }) => {
         )}
       </Flex>
       <SellModal isOpen={isOpen} onClose={onClose} values={values} />
-    </>
+    </HoverBox>
   );
 };
 
