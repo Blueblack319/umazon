@@ -20,10 +20,12 @@ import { useCart } from '../utils/cart';
 import Rating from './Rating';
 import SellModal from './SellModal';
 import CustomAlertDialog from '../components/CustomAlertDialog';
+import { useAuth } from '../lib/auth';
 
 const ItemForSale = ({ values }) => {
   const cart = useCart();
   const router = useRouter();
+  const { user } = useAuth();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const quantityRef = useRef(null);
   const {
@@ -88,7 +90,11 @@ const ItemForSale = ({ values }) => {
               </NumberInputStepper>
             </NumberInput>
 
-            <Button colorScheme="orange" onClick={addBtnOnClick.bind(values)}>
+            <Button
+              colorScheme="orange"
+              onClick={addBtnOnClick.bind(values)}
+              disabled={user && values.ownerId === user.uid}
+            >
               Add to Bucket
             </Button>
           </HStack>

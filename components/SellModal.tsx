@@ -152,6 +152,11 @@ const SellModal: React.FC<SellModalProps> = ({ isOpen, onClose, values }) => {
                 actions.setSubmitting(true);
                 handleSubmitted(values);
                 actions.setSubmitting(false);
+                setRating([
+                  <StarIcon color="gold" key={0} />,
+                  <StarIcon color="gold" key={1} />,
+                  <StarIcon color="gold" key={2} />,
+                ]);
               }, 3000);
             }}
           >

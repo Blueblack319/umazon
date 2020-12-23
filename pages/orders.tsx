@@ -18,18 +18,19 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const cookies = new Cookies(ctx.req, ctx.res);
   const token = cookies.get('token');
   const { uid } = await auth.verifyIdToken(token);
-  if (ctx.query.session_id) {
-  }
-  const ordersAll = await fetcher(`${BASE_URL}/api/ordered`, token);
+  const orderDetails = await fetcher(
+    'http://localhost:3000/api/ordered',
+    token
+  );
   return {
     props: {
-      ordersAll,
+      orderDetails,
       uid,
     },
   };
 };
 
-const Orders = ({ ordersAll, uid }) => {
+const Orders = ({ orderDetails, uid }) => {
   const [productsOrdered, setProductsOrdered] = useState(null);
   const router = useRouter();
   const { cartItems, resetCartItems } = useCart();
@@ -72,8 +73,8 @@ const Orders = ({ ordersAll, uid }) => {
               products={productsOrdered}
             />
           ) : null}
-          {ordersAll.length !== 0 ? (
-            <LayoutProdContainer title="All Orders" products={ordersAll} />
+          {orderDetails.length !== 0 ? (
+            <LayoutProdContainer title="All Orders" products={orderDetails} />
           ) : null}
         </VStack>
         <Box w="300px" pos="relative" alignSelf="flex-start">
