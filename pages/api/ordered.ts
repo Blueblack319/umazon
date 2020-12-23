@@ -5,7 +5,7 @@ import { getOrderedProducts } from '../../lib/db-admin';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { uid } = await auth.verifyIdToken(req.headers.token as string);
-  const ordered = await getOrderedProducts(uid);
+  const orderDetails = await getOrderedProducts(uid);
 
-  res.status(200).json(ordered);
+  res.status(200).json(orderDetails);
 };
